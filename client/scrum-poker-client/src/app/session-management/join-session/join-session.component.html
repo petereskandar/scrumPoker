@@ -1,0 +1,30 @@
+<div class="container" *ngIf="!joiner.name; else showCards">
+    <form #joinerForm="ngForm" novalidate (submit)="setJoinerName(joinerForm)">
+      <div class="form-group">
+          <label for="email">Session Id:</label>
+          <input type="text" disabled class="form-control" placeholder="Session Id" [value]="joiner.sessionId">
+      </div>
+      <div class="form-group">
+          <label for="joinerName">Name :</label>
+          <input type="text" name="joinerName" class="form-control"
+                 [ngModel]="joiner.name"
+                 #joinerName="ngModel" required
+                 placeholder="Please Enter Your Name" id="joinerName"
+                 [ngClass]="{'is-invalid': joinerName.invalid && (joinerName.dirty || joinerName.touched)}">
+        </div>
+        <div class="form-group">
+          <label for="joinerName">Email :</label>
+          <input type="text" name="joinerEmail" class="form-control"
+                 [ngModel]="joiner.email"
+                 #joinerEmail="ngModel"
+                 email required
+                 placeholder="Please Enter Your Email Address" id="joinerName"
+                 [ngClass]="{'is-invalid': joinerEmail.invalid && (joinerEmail.dirty || joinerEmail.touched)}">
+        </div>
+      <button type="submit" class="btn btn-primary">Join</button>
+    </form>
+</div>
+
+<ng-template #showCards>
+  <app-poker-cards [joiner]="joiner"></app-poker-cards>
+</ng-template>

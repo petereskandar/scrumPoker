@@ -1,0 +1,27 @@
+<div class="jumbotron">
+<h1 class="display-4">Hello, {{joiner.name}}</h1>
+<p class="lead">your session Id is {{joiner.sessionId}}</p>
+  <hr class="my-4">
+</div>
+
+
+<div class="card mb-3 col-md-2" *ngFor="let card of cardNumbers">
+  <div class="flip-card mb-3">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <!--Card image-->
+        <div class="view overlay">
+          <a href="#">
+            <div class="mask rgba-white-slight"></div>
+          </a>
+        </div>
+
+        <!--Card content-->
+        <div class="card-body" style="border:0; ">
+          <!--Title-->
+        <h3 class="card-title">Card {{card}}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
