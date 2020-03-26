@@ -7,9 +7,13 @@ exports.sessionRouter = sessionRouter;
 var sessionController = new sessionController_1.SessionController();
 // get randomic sessionId
 sessionRouter.get("", function (req, res) {
-    sessionController.get(req, res);
+    sessionController.getSessionId(req, res);
 });
-// get randomic sessionId
+// create new session
 sessionRouter.post("", function (req, res) {
-    sessionController.post(req, res);
+    sessionController.createNewSession(req, res);
+});
+// get session by Id
+sessionRouter.get("/:id", function (req, res) {
+    sessionController.getSessionById(req, res);
 });

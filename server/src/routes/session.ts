@@ -7,12 +7,17 @@ const sessionController = new SessionController();
 
 // get randomic sessionId
 sessionRouter.get("", (req, res) => {
-    sessionController.get(req, res);
+    sessionController.getSessionId(req, res);
 });
 
-// get randomic sessionId
+// create new session
 sessionRouter.post("", (req, res) => {
-    sessionController.post(req, res);
+    sessionController.createNewSession(req, res);
+});
+
+// get session by Id
+sessionRouter.get("/:id", (req, res) => {
+    sessionController.getSessionById(req, res);
 });
 
 export { sessionRouter }

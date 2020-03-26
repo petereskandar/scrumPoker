@@ -1,6 +1,8 @@
 
 import { createServer, Server } from 'http';
 import * as express from 'express';
+import * as  mongoose from 'mongoose';
+import * as bodyParser from 'body-parser';
 import * as nconf from 'nconf';
 import * as socketIo from 'socket.io';
 
@@ -23,6 +25,7 @@ export class ScrumPokerServer {
         this.createServer();
         this.sockets();
         this.listen();
+        this.setMongoConnection();
     }
 
     private createApp(): void {
@@ -35,6 +38,9 @@ export class ScrumPokerServer {
 
     private config(): void {
         this.port = process.env.PORT || ScrumPokerServer.PORT;
+        // adding bodyParser
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({ extended: false }));
     }
 
     private sockets(): void {
@@ -58,6 +64,19 @@ export class ScrumPokerServer {
             socket.on('disconnect', () => {
                 console.log('Client disconnected');
             });
+        });
+    }
+
+    // MongoDB Connection
+    private setMongoConnection() {
+        mongoose.connect("mongodb+srv://MEAN_APP:" +
+        process.env.MONGO_ATLAS_PW +
+        "@cluster0-qtxwi.mongodb.net/scrumPoker?retryWrites=true&w=majority", {
+            useNewUrlParser: true
+          }).then(() => {
+            console.log('Connected to DB');
+        }).catch((err) => {
+            console.log('Unable to Connect to DB', err, process.env.MONGO_ATLAS_PW);
         });
     }
 

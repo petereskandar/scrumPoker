@@ -2,6 +2,7 @@
     "files": [
       "src/*.ts",
       "src/model/*.ts",
+      "src/model/**/*.ts",
       "src/routes/*.ts",
       "src/controllers/*.ts"
     ],

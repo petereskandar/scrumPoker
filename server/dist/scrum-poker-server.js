@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var http_1 = require("http");
 var express = require("express");
+var mongoose = require("mongoose");
+var bodyParser = require("body-parser");
 var nconf = require("nconf");
 var socketIo = require("socket.io");
 // express routes
@@ -13,6 +15,7 @@ var ScrumPokerServer = /** @class */ (function () {
         this.createServer();
         this.sockets();
         this.listen();
+        this.setMongoConnection();
     }
     ScrumPokerServer.prototype.createApp = function () {
         this.app = express();
@@ -22,6 +25,9 @@ var ScrumPokerServer = /** @class */ (function () {
     };
     ScrumPokerServer.prototype.config = function () {
         this.port = process.env.PORT || ScrumPokerServer.PORT;
+        // adding bodyParser
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({ extended: false }));
     };
     ScrumPokerServer.prototype.sockets = function () {
         this.io = socketIo(this.server);
@@ -42,6 +48,18 @@ var ScrumPokerServer = /** @class */ (function () {
             socket.on('disconnect', function () {
                 console.log('Client disconnected');
             });
+        });
+    };
+    // MongoDB Connection
+    ScrumPokerServer.prototype.setMongoConnection = function () {
+        mongoose.connect("mongodb+srv://MEAN_APP:" +
+            process.env.MONGO_ATLAS_PW +
+            "@cluster0-qtxwi.mongodb.net/scrumPoker?retryWrites=true&w=majority", {
+            useNewUrlParser: true
+        }).then(function () {
+            console.log('Connected to DB');
+        }).catch(function (err) {
+            console.log('Unable to Connect to DB', err, process.env.MONGO_ATLAS_PW);
         });
     };
     ScrumPokerServer.prototype.getApp = function () {

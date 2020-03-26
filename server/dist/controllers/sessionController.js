@@ -49,6 +49,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var session_model_1 = require("./../model/mongo/session.model");
 var uuid_1 = require("uuid");
 var baseController_1 = require("./baseController");
 var SessionController = /** @class */ (function (_super) {
@@ -56,7 +57,8 @@ var SessionController = /** @class */ (function (_super) {
     function SessionController() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SessionController.prototype.getImpl = function (req, res) {
+    // get randomic sessionId
+    SessionController.prototype.getSessionId = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 this.sessionId = this.sessionId ? this.sessionId : uuid_1.v1();
@@ -75,11 +77,48 @@ var SessionController = /** @class */ (function (_super) {
             });
         });
     };
-    SessionController.prototype.postImpl = function (req, res) {
+    // create new session saving data on DB
+    SessionController.prototype.createNewSession = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
+            var sessionSchema;
+            var _this = this;
             return __generator(this, function (_a) {
                 try {
-                    this.ok(res);
+                    sessionSchema = new session_model_1.Session({
+                        moderatorName: req.body.moderatorName,
+                        moderatorEmail: req.body.moderatorEmail,
+                        sessionDesc: req.body.sessionDesc
+                    });
+                    // saving data to DB
+                    sessionSchema.save().then(function (createdSession) {
+                        _this.ok(res, createdSession);
+                    }).catch(function (err) {
+                        _this.fail(res, err);
+                    });
+                }
+                catch (err) {
+                    this.fail(res, err.toString());
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
+    // get session by Id
+    SessionController.prototype.getSessionById = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                try {
+                    session_model_1.Session.findOne({ _id: req.params.id }).then(function (session) {
+                        if (session) {
+                            _this.ok(res, session);
+                        }
+                        else {
+                            _this.notFound(res, 'Session Not Found');
+                        }
+                    }).catch(function (err) {
+                        _this.fail(res, err);
+                    });
                 }
                 catch (err) {
                     this.fail(res, err.toString());
